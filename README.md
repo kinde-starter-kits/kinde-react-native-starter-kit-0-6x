@@ -1,41 +1,151 @@
-# 👉 To complete this README and ensure it follows the README template, please action the following: 👈
+# Kinde Starter Kit - React Native 0.6x
 
-- 👀 [See here](https://github.com/kinde-oss/.github/blob/02d19d8d2225444a29d2d2046a2726f7b17155fb/.github/CONTRIBUTING.md#sdks) to learn about the generator and non-generator repositories.
-- 🧹 Once complete, remove this entire section.
-
-## For both types of repositories (generator and non-generator)
-
-- [ ] Replace all instances of `[technology/framework name]` placeholder with the technology or framework for this SDK, e.g. “Kinde React” or “Kinde Elixir”. For generator repositories, add “generator” at the end, e.g. “Kinde React generator” or “Kinde Elixir generator”.
-
-## For generator repositories
-
-- [ ] Remove the “Documentation” section and replace it with relevant sections this README requires.
-- [ ] Remove the “Publishing” section.
-
-## For non-generator repositories
-
-- [ ] Refrain from adding information to this README that should be in the corresponding Kinde document (linked from the “Documentation” section below). If information is missing from the Kinde document, please submit an [issue](https://github.com/kinde-oss/.github/blob/02d19d8d2225444a29d2d2046a2726f7b17155fb/.github/CONTRIBUTING.md#issues) via the “Documentation issue” template or start a chat in the Kinde community via the [#documentation channel](https://thekindecommunity.slack.com/archives/C057M2BQ6LV). **This README should follow the structure in this template.** If custom information is required that, for some reason, does not belong in the Kinde document, add it **above** the “Documentation” section.
-- [ ] If possible, add the [“Version”](https://shields.io/category/version) and [“Build”](https://shields.io/category/build) shields as the first shields in the list.
-- [ ] Add the corresponding Kinde SDK document URL to the link in the “Documentation” section. All Kinde documents are [here](https://kinde.com/docs/developer-tools).
-- [ ] Add documentation to the “Publishing” section covering how this repository’s package gets published.
-
-# Kinde [technology/framework name]
-
-The Kinde SDK for [technology/framework name].
+The Kinde Starter Kit for React Native SDK 0.6x.
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://makeapullrequest.com) [![Kinde Docs](https://img.shields.io/badge/Kinde-Docs-eee?style=flat-square)](https://kinde.com/docs/developer-tools) [![Kinde Community](https://img.shields.io/badge/Kinde-Community-eee?style=flat-square)](https://thekindecommunity.slack.com)
 
+## Register an account on Kinde
+
+To get started set up an account on [Kinde](https://app.kinde.com/register).
+
+## Development
+
+### Prerequisites
+
+- NodeJS version 16.x or higher
+- Ruby 2.6.10 or higher
+
+Follow [the installation instructions for your chosen OS](https://reactnative.dev/docs/environment-setup) to install dependencies
+
+### Initial set up
+
+1. Clone the repository to your machine:
+
+```shell
+git clone https://github.com/kinde-starter-kits/kinde-react-native-starter-kit-0-6x.git
+```
+
+2. Go into the project:
+
+```shell
+cd kinde-react-native-starter-kit-0-6x
+```
+
+3. Install the dependencies:
+
+```shell
+npm install
+
+# [iOS] Install iOS native dependencies
+cd ios
+bundle install && bundle exec pod install
+```
+
+### Setup your local environment
+
+You should change Kinde config in the `src/components/Header.tsx` file:
+
+```javascript
+new KindeSDK(
+  'https://your_kinde_domain.kinde.com',
+  'your_schema://your_kinde_domain.kinde.com/kinde_callback',
+  'your_kinde_client_id',
+  'your_schema://your_kinde_domain.kinde.com/kinde_callback'
+);
+```
+
+### Set your Callback and Logout URLs
+
+Your user will be redirected to Kinde to authenticate. After they have logged in or registered they will be redirected back to your NextJS application.
+
+You need to specify in Kinde which url you would like your user to be redirected to in order to authenticate your app.
+
+On the App Keys page set `Allowed callback URLs` to your deep linking
+
+> Important! This is required for your users to successfully log in to your app.
+
+You will also need to set the url they will be redirected to upon logout. Set the `Allowed logout redirect URLs` to your deep linking.
+
+### Configuration Deep link
+
+#### Android
+
+Open `AndroidManifest.xml` and change your scheme:
+
+```xml
+<intent-filter>
+	<action android:name="android.intent.action.VIEW" />
+	<category android:name="android.intent.category.DEFAULT" />
+	<category android:name="android.intent.category.BROWSABLE" />
+	<data android:scheme="your_schema" android:host="your_kinde_domain.kinde.com" />
+</intent-filter>
+```
+
+#### iOS
+
+Please make sure you have configuration URL scheme in `Info.plist`:
+
+```swift
+...
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>your_schema</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>your_schema</string>
+			</array>
+		</dict>
+	</array>
+...
+
+```
+
+### How to start?
+
+#### Start the metro server
+
+Run below command:
+
+```shell
+npm start --reset-cache
+```
+
+#### Start your app
+
+```shell
+# iOS
+npm run ios
+# or for Android
+npm run android
+```
+
 ## Documentation
 
-Please refer to the Kinde [[technology/framework name] SDK document]().
+For details on integrating this SDK into your project, head over to the [Kinde docs](https://kinde.com/docs/) and see the [React Native SDK 0.6x](https://kinde.com/docs/developer-tools/react-native-sdk) doc 👍🏼.
+
+## General Tips
+
+If you got the error `'value' is unavailable: introduced in iOS 12.0` when trying to build the app, you can follow the below steps to fix that:
+
+1. In your Xcode project navigator, select Pods.
+2. Under Targets, select React-Codegen
+3. Set the window to Build Settings
+4. Under Deployment, set iOS Deployment Target to 12.4
+5. Clean project and rebuild: Product > Clean Build Folder, Product > Build
+
+![screenshot](./assets/image.png)
 
 ## Publishing
 
-[Details here]
+The core team handles publishing.
 
 ## Contributing
 
-Please refer to Kinde’s [contributing guidelines](https://github.com/kinde-oss/.github/blob/489e2ca9c3307c2b2e098a885e22f2239116394a/CONTRIBUTING.md).
+Please refer to Kinde’s [contributing guidelines](https://github.com/kinde-oss/.github/blob/489e2ca9c3307c2b2e098a885e22f2239116394a/CONTRIBUTING.md).
 
 ## License
 
